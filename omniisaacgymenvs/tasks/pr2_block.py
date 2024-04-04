@@ -22,11 +22,15 @@ from omni.isaac.core.utils.torch.maths import tensor_clamp
 from omniisaacgymenvs.tasks.base.rl_task import RLTask
 from omniisaacgymenvs.robots.articulations.pr2 import PR2
 from omniisaacgymenvs.robots.articulations.views.pr2_view import PR2View
+import omni.isaac.core.utils.stage as stage_utils
 from pxr import Usd, UsdGeom
+import omni.isaac.core.utils.stage as stage_utils
+
 
 
 class PR2Block(RLTask):
     def __init__(self, name, sim_config, env, offset=None) -> None:
+        print(stage_utils.print_stage_prim_paths())
         self.update_config(sim_config)
 
         self.dt = 1 / 60.0
@@ -53,7 +57,13 @@ class PR2Block(RLTask):
         self.get_p2r()
         self.get_props()
 
+        print('==================== setupscene ==============')
+        print(stage_utils.print_stage_prim_paths())
+
         super().set_up_scene(scene, filter_collisions=False)
+
+        print('==================== setupscene ============== 1')
+        print(stage_utils.print_stage_prim_paths())
 
         # Add p2r view to the scene
         self._p2rs = PR2View(prim_paths_expr="/World/envs/.*/pr2", name="p2r_view")
@@ -62,20 +72,27 @@ class PR2Block(RLTask):
         scene.add(self._p2rs._lfingers)
         scene.add(self._p2rs._rfingers)
 
+        print('==================== setupscene ============== 2')
+        print(stage_utils.print_stage_prim_paths())
+
         # Add props view to the scene
         self._props = RigidPrimView(prim_paths_expr="/World/envs/.*/prop/.*", name="prop_view", reset_xform_properties=False)
         scene.add(self._props)
+        print('==================== setupscene ============== 3')
+        print(stage_utils.print_stage_prim_paths())
         
         return
 
     def get_p2r(self):
         # NOTE: Basically self.default_zero_env_path is /World/envs/env_0
+        print('================================================= get pr2')
         p2r = PR2(prim_path=self.default_zero_env_path + "/pr2", name="p2r")
         self._sim_config.apply_articulation_settings(
             "p2r", get_prim_at_path(p2r.prim_path), self._sim_config.parse_actor_config("p2r")
         )
 
     def get_props(self):
+        print('================================================= get props')
         prop = DynamicCuboid(
             prim_path=self.default_zero_env_path + "/prop/prop_0",
             name="prop",
@@ -91,6 +108,7 @@ class PR2Block(RLTask):
     
     def get_observations(self) -> dict:
         # Get end effector positions and orientations
+        print('================================================= get observations')
         end_effector_positions, end_effector_orientations = self._p2rs._hands.get_world_poses(clone=False)
         end_effector_positions = end_effector_positions[:, 0:3] - self._env_pos
         end_effector_orientations = end_effector_orientations[:, [3, 0, 1, 2]]
@@ -106,6 +124,7 @@ class PR2Block(RLTask):
         return observations
 
     def pre_physics_step(self, actions) -> None:
+        print('================================================= pre physics step')
         if not self._env._world.is_playing():
             return
 
@@ -125,6 +144,7 @@ class PR2Block(RLTask):
         self._p2rs.set_joint_position_targets(self.p2r_dof_targets, indices=env_ids_int32)
 
     def reset_idx(self, env_ids):
+        print('================================================= reset idx')
         env_ids_32 = env_ids.type(torch.int32)
         env_ids_64 = env_ids.type(torch.int64)
 

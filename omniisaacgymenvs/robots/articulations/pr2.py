@@ -19,6 +19,7 @@ from omni.isaac.core.utils.prims import get_prim_at_path
 from omni.isaac.core.utils.stage import add_reference_to_stage
 from pxr import PhysxSchema
 
+import omni.isaac.core.utils.stage as stage_utils
 
 class PR2(Robot):
     def __init__(
@@ -30,6 +31,8 @@ class PR2(Robot):
         orientation: Optional[torch.tensor] = None,
     ) -> None:
         """[summary]"""
+        print('================================ pr2.py======================')
+        print(stage_utils.print_stage_prim_paths())
 
         self._usd_path = usd_path
         self._name = name
@@ -46,6 +49,10 @@ class PR2(Robot):
 
         add_reference_to_stage(self._usd_path, prim_path)
 
+        print('================================ pr2.py====================== add_reference_to_stage')
+        print(stage_utils.print_stage_prim_paths())
+
+
         super().__init__(
             prim_path=prim_path,
             name=name,
@@ -53,4 +60,3 @@ class PR2(Robot):
             orientation=self._orientation,
             articulation_controller=None,
         )
-

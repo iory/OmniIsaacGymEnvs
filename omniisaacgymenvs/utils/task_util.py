@@ -46,11 +46,13 @@ def import_tasks():
     from omniisaacgymenvs.tasks.quadcopter import QuadcopterTask
     from omniisaacgymenvs.tasks.shadow_hand import ShadowHandTask
     from omniisaacgymenvs.tasks.pr2_block import PR2Block
+    from omniisaacgymenvs.tasks.panda_block import PandaBlock
 
     from omniisaacgymenvs.tasks.warp.ant import AntLocomotionTask as AntLocomotionTaskWarp
     from omniisaacgymenvs.tasks.warp.cartpole import CartpoleTask as CartpoleTaskWarp
     from omniisaacgymenvs.tasks.warp.humanoid import HumanoidLocomotionTask as HumanoidLocomotionTaskWarp
 
+    print('=====================================')
     # Mappings from strings to environments
     task_map = {
         "AllegroHand": AllegroHandTask,
@@ -65,6 +67,7 @@ def import_tasks():
         "FactoryTaskNutBoltScrew": FactoryTaskNutBoltScrew,
         "FrankaCabinet": FrankaCabinetTask,
         "PR2Block": PR2Block,
+        "PandaBlock": PandaBlock,
         "FrankaDeformable": FrankaDeformableTask,
         "Humanoid": HumanoidLocomotionTask,
         "Ingenuity": IngenuityTask,

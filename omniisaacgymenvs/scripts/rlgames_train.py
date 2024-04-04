@@ -80,6 +80,7 @@ class RLGTrainer:
 
 @hydra.main(version_base=None, config_name="config", config_path="../cfg")
 def parse_hydra_configs(cfg: DictConfig):
+    print(cfg)
 
     time_str = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
@@ -142,6 +143,7 @@ def parse_hydra_configs(cfg: DictConfig):
     cfg.seed = set_seed(cfg.seed, torch_deterministic=cfg.torch_deterministic)
     cfg_dict["seed"] = cfg.seed
 
+    print(cfg_dict, env)
     task = initialize_task(cfg_dict, env)
 
     if cfg.wandb_activate and global_rank == 0:
@@ -171,4 +173,8 @@ def parse_hydra_configs(cfg: DictConfig):
 
 
 if __name__ == "__main__":
+    print('......................................................')
+    print('......................................................')
+    print('......................................................')
+    print('......................................................')
     parse_hydra_configs()

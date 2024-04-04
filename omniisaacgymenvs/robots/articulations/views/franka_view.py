@@ -2,6 +2,8 @@ from typing import Optional
 
 from omni.isaac.core.articulations import ArticulationView
 from omni.isaac.core.prims import RigidPrimView
+import omni.isaac.core.utils.stage as stage_utils
+
 
 
 class FrankaView(ArticulationView):
@@ -13,6 +15,9 @@ class FrankaView(ArticulationView):
         """[summary]"""
 
         super().__init__(prim_paths_expr=prim_paths_expr, name=name, reset_xform_properties=False)
+
+        print('.............................')
+        print(stage_utils.print_stage_prim_paths())
 
         self._hands = RigidPrimView(
             prim_paths_expr="/World/envs/.*/franka/panda_link7", name="hands_view", reset_xform_properties=False
